@@ -129,7 +129,7 @@ class MySQLController:
         try:
             print(" [-] MySQLController: Storing a message")
             # Get a timestamp for inserted row
-            # timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
             # Check input message. It must be a dictionary
             # for v in message.values():
@@ -140,8 +140,8 @@ class MySQLController:
             message = str(json.dumps(message))
 
             # Craft and execute the query
-            query = 'INSERT INTO `'+ self.table +'` (`data`, `created_at`, `updated_at`) VALUES (%s, now(), now())'
-            query_values = (message)
+            query = 'INSERT INTO `'+ self.table +'` (`data`, `created_at`, `updated_at`) VALUES (%s, %s, %s)'
+            query_values = (message, timestamp, timestamp)
 
             print(query)
             self.cursor.execute(query, query_values)
