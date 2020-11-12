@@ -140,7 +140,7 @@ class MySQLController:
             message = json.dumps(message)
 
             # Craft and execute the query
-            query = "INSERT INTO " + self.table + " (data, created_at, updated_at) VALUES (%s, %s, %s)"
+            query = "INSERT INTO '" + self.table + "' (data, created_at, updated_at) VALUES (%s, %s, %s)"
             query_values = (message, timestamp, timestamp)
             self.cursor.execute(query, query_values)
 
