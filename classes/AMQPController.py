@@ -3,23 +3,13 @@ from typing import Callable
 from decouple import config # pip install python-decouple
 from datetime import datetime
 
-#
+
+
 class AMQPController:
 
     # PUBLIC: Constructor of the class
     # Set credentials and open a connection against AMQP server
     def __init__(self):
-        """
-        EXAMPLE
-        
-        Blah blah blah
-
-        :param pika.channel.Channel channel: The channel object
-        :param pika.Spec.Basic.Deliver: basic_deliver method
-        :param pika.Spec.BasicProperties: properties
-        :param str|unicode body: The message body
-
-        """
         try:
             print(" [-] Starting AMQPController")
 
@@ -137,6 +127,7 @@ class AMQPController:
 
     # PRIVATE: Return a dict object with real properties found on 'properties'
     # properties: <BasicProperties(['delivery_mode=1', "headers={'otro': 'prueba', 'testing': 'testing'}", 'timestamp=23423423432423'])>
+    # Method = <Basic.Deliver(['consumer_tag=ctag1.02c08c2697e54a6e945aabaf8f4ae25a', 'delivery_tag=1', 'exchange=', 'redelivered=False', 'routing_key=hello'])>
     def __ParseMessageProperties (self, properties: pika.spec.BasicProperties):
         found_properties = {}
         for property in self.allowedProperties:

@@ -2,7 +2,8 @@ import mysql.connector as mysql # pip install mysql-connector-python
 from datetime import datetime
 import json
 
-#
+
+
 class MySQLController:
 
 
@@ -26,8 +27,17 @@ class MySQLController:
             self.connection = None
             self.cursor = None
 
+            # Try to open a connection
+            print(" [-] Opening a connection")
             if (self.__OpenConnection() != True ):
                 raise
+
+            # Check tables (and create if needed)
+            print(" [-] Checking and creating tables")
+            if (self.__CheckTable() == False ):
+                if (self.__CreateTable() == False ):
+                    raise
+
             return None
         except:
             print(" [E] MySQLController: Impossible to init the class")
@@ -60,6 +70,56 @@ class MySQLController:
             return True
         except:
             print(" [E] MySQLController: Impossible to connect to the server")
+            return False
+
+
+
+    # PRIVATE: Create a table for messages into database
+    def __CheckTable(self):
+        try:
+            print(" [-] MySQLController: Checking table existance")
+            query = (
+                'SHOW TABLES LIKE ' + self.table 
+            )
+            self.cursor.execute(query)
+
+            result = self.cursor.fetchone()
+            if not result:
+                return False
+
+            return True
+        except:
+            print(" [E] MySQLController: Table existance can not be checked")
+            return False
+
+
+
+    # PRIVATE: Create a table for messages into database
+    def __CreateTable(self):
+        try:
+            print(" [-] MySQLController: Creating the table")
+
+            # Dropping the table if already exists.
+            self.cursor.execute('DROP TABLE IF EXISTS ' + self.table)
+
+            # Craft and execute the query
+            query = (
+                'CREATE TABLE ' + self.table + ' ('
+                'id bigint unsigned NOT NULL AUTO_INCREMENT, '
+                'data json NOT NULL, '
+                'created_at timestamp NULL DEFAULT NULL, '
+                'updated_at timestamp NULL DEFAULT NULL), '
+                'PRIMARY KEY (id)'
+            )
+            self.cursor.execute(query)
+
+            # Store the changes into DB
+            self.connection.commit()
+
+            # No raises, return true
+            return True
+        except:
+            print(" [E] MySQLController: table for messages was not created")
             return False
 
 
