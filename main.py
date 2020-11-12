@@ -5,31 +5,33 @@ from classes.MySQLController import MySQLController
 
 
 
+# Callback to be executed when a message arrives
+def on_message (headers, properties, body):
+    try:
+        print(" [*] Message received")
+
+        message = {
+            "body" : body,
+            "headers" : headers,
+            "properties" : properties
+        }
+        
+        if (mysql.StoreMessage(message) != True ):
+            raise
+    except Exception as error:
+        print(" [E] Message not stored on DB")
+        print('Caught this error: ' + repr(error))
+
+
+
 # Main process
 def main():
-
-    # Callback to be executed when a message arrives
-    def on_message (headers, properties, body):
-        try:
-            print(" [*] Message received")
-
-            message = {
-                "body" : body,
-                "headers" : headers,
-                "properties" : properties
-            }
-
-            if (mysql.StoreMessage(message) != True ):
-                raise
-        except Exception as error:
-            print(" [E] Message not stored on DB")
-            print('Caught this error: ' + repr(error))
 
     # Init Controllers
     print(" [*] Starting controllers")
 
-    amqp = AMQPController()
-    mysql = MySQLController()
+    global amqp = AMQPController()
+    global mysql = MySQLController()
     
     # Process the queue
     amqp.Consume(on_message)

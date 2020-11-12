@@ -132,9 +132,9 @@ class MySQLController:
             # timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
             # Check input message. It must be a dictionary
-            for v in message.values():
-                if not isinstance(v, dict):
-                    raise Exception("Message parameter is not a dictionary object")
+            # for v in message.values():
+            #     if not isinstance(v, dict):
+            #         raise Exception("Message parameter is not a dictionary object")
 
             # Convert message into JSON string
             message = str(json.dumps(message))
