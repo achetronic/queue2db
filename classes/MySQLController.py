@@ -79,9 +79,7 @@ class MySQLController:
     def __CheckTable(self):
         try:
             print(" [-] MySQLController: Checking table existance")
-            query = (
-                'SHOW TABLES LIKE ' + self.table 
-            )
+            query = ("SHOW TABLES LIKE '" + self.table + "'")
             self.cursor.execute(query)
 
             result = self.cursor.fetchone()
