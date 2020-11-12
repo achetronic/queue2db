@@ -10,7 +10,7 @@ from classes.MySQLController import MySQLController
 # Callback to be executed when a message arrives
 def on_message (headers, properties, body):
     try:
-        print(" [*] Message received")
+        print(colored("[I] Main: Message received", 'yellow'))
 
         message = {
             "body" : body,
@@ -30,7 +30,7 @@ def on_message (headers, properties, body):
 def main():
 
     # Init Controllers
-    print(" [*] Starting controllers")
+    print(colored("[I] Main: Starting controllers", 'yellow'))
 
     global amqp
     global mysql
@@ -48,7 +48,7 @@ if __name__ == '__main__':
     try:
         main()
     except KeyboardInterrupt:
-        print('Interrupted')
+        print(colored("[I] Main: Process interrupted pressing [Ctl] + [C] keys", 'yellow'))
         try:
             sys.exit(0)
         except SystemExit:
