@@ -39,8 +39,9 @@ class MySQLController:
                     raise
 
             return None
-        except:
+        except Exception as error:
             print(" [E] MySQLController: Impossible to init the class")
+            print('Caught this error: ' + repr(error))
             exit()
         
 
@@ -68,8 +69,9 @@ class MySQLController:
 
             # No raises, return true
             return True
-        except:
+        except Exception as error:
             print(" [E] MySQLController: Impossible to connect to the server")
+            print('Caught this error: ' + repr(error))
             return False
 
 
@@ -88,8 +90,9 @@ class MySQLController:
                 return False
 
             return True
-        except:
+        except Exception as error:
             print(" [E] MySQLController: Table existance can not be checked")
+            print('Caught this error: ' + repr(error))
             return False
 
 
@@ -118,8 +121,9 @@ class MySQLController:
 
             # No raises, return true
             return True
-        except:
+        except Exception as error:
             print(" [E] MySQLController: table for messages was not created")
+            print('Caught this error: ' + repr(error))
             return False
 
 
@@ -152,8 +156,9 @@ class MySQLController:
 
             # No raises, return true
             return True
-        except:
+        except Exception as error:
             print(" [E] MySQLController: Message was not stored on database")
+            print('Caught this error: ' + repr(error))
             return False
 
 
