@@ -129,19 +129,19 @@ class MySQLController:
     def StoreMessage(self, message):
         try:
             # Get a timestamp for inserted row
-            timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            # timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
             # Check input message. It must be a dictionary
             for v in message.values():
                 if not isinstance(v, dict):
                     raise Exception("Message parameter is not a dictionary object")
 
-            # Convert message into JSON
-            message = json.dumps(message)
+            # Convert message into JSON string
+            message = str(json.dumps(message))
 
             # Craft and execute the query
-            query = "INSERT INTO `" + self.table + "` (`data`, `created_at`, `updated_at`) VALUES (%s, %s, %s)"
-            query_values = (message, timestamp, timestamp)
+            query = 'INSERT INTO `'+ self.table +'` (`data`, `created_at`, `updated_at`) VALUES (%s, now(), now())'
+            query_values = (message)
             self.cursor.execute(query, query_values)
 
             # Store the data into DB
