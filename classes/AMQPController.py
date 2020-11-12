@@ -1,6 +1,6 @@
-import pika # pip install pika
+import pika
 from typing import Callable
-from decouple import config # pip install python-decouple
+from decouple import config
 from datetime import datetime
 
 

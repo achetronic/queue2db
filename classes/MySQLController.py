@@ -1,12 +1,11 @@
-import mysql.connector as mysql # pip install mysql-connector-python
+import mysql.connector as mysql
 from datetime import datetime
+from decouple import config
 import json
 
 
 
 class MySQLController:
-
-
 
     # PUBLIC: Constructor of the class
     # Set credentials and open a connection against AMQP server
