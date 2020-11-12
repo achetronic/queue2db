@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 import sys, os
+from decouple import config
+from termcolor import colored
 from classes.AMQPController import AMQPController
 from classes.MySQLController import MySQLController
 

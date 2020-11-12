@@ -1,6 +1,7 @@
 import pika
 from typing import Callable
 from decouple import config
+from termcolor import colored
 from datetime import datetime
 
 
@@ -11,7 +12,7 @@ class AMQPController:
     # Set credentials and open a connection against AMQP server
     def __init__(self):
         try:
-            print(" [-] AMQPController: Starting controller")
+            print("[-] AMQPController: Starting controller")
 
             server = {
                 "host": config('AMQP_SERVER_HOST', default='localhost'),
@@ -46,8 +47,9 @@ class AMQPController:
             if (self.__OpenConnection() != True ):
                 raise
             return None
-        except:
-            print(" [E] AMQPController: Impossible to init the class")
+        except Exception as error:
+            print(colored("[E] AMQPController: Impossible to init the class", 'red'))
+            print(colored('[I] AMQPController: ' + repr(error), 'yellow'))
             exit()
         
 
@@ -55,7 +57,7 @@ class AMQPController:
     # PRIVATE: Open a AMQP connection and store it into the class
     def __OpenConnection(self):
         try:
-            print(" [-] AMQPController: Opening a connection")
+            print("[-] AMQPController: Opening a connection")
             # Set a connection
             credentials = pika.PlainCredentials(self.server['user'], self.server['pass'])
             parameters  = pika.ConnectionParameters(
@@ -91,8 +93,8 @@ class AMQPController:
             # No raises, return true
             return True
         except Exception as error:
-            print(" [E] AMQPController: Impossible to connect to the server")
-            #print('Caught this error: ' + repr(error))
+            print(colored("[E] AMQPController: Impossible to connect to the server", 'red'))
+            print(colored('[I] AMQPController: ' + repr(error), 'yellow'))
             return False
 
 
@@ -101,7 +103,7 @@ class AMQPController:
     # This method pass three arguments (dict objects) to the callback: headers, properties, body
     def Consume(self, callback: Callable = None):
         try:
-            print(' [-] AMQPController: Starting a consumer')
+            print('[-] AMQPController: Starting a consumer')
             timestamp = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
 
             # User gave us a callback?
@@ -118,11 +120,11 @@ class AMQPController:
             self.channel.basic_consume(queue=self.queue, on_message_callback=defaultCallback, auto_ack=True, consumer_tag=self.consumerTag+'_'+timestamp)
 
             # Start consuming
-            print(' [-] AMQPController: Consumer started. Waiting for messages.')
+            print(colored('[-] AMQPController: Consumer started. Waiting for messages.', 'green'))
             self.channel.start_consuming()
         except Exception as error:
-            print(' [E] AMQPController: Consumer stoped.')
-            print('Caught this error: ' + repr(error))
+            print(colored('[E] AMQPController: Consumer stoped.', 'red'))
+            print(colored('[I] AMQPController: ' + repr(error), 'yellow'))
             return None
 
 

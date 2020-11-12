@@ -1,6 +1,7 @@
 import mysql.connector as mysql
 from datetime import datetime
 from decouple import config
+from termcolor import colored
 import json
 
 
@@ -11,7 +12,7 @@ class MySQLController:
     # Set credentials and open a connection against AMQP server
     def __init__(self):
         try:
-            print(" [-] MySQLController: Starting controller")
+            print("[-] MySQLController: Starting controller")
 
             # Access this with server["port"]
             server = {
@@ -37,8 +38,8 @@ class MySQLController:
 
             return None
         except Exception as error:
-            print(" [E] MySQLController: Impossible to init the class")
-            print('Caught this error: ' + repr(error))
+            print(colored("[E] MySQLController: Impossible to init the class", 'red'))
+            print(colored('[I] MySQLController: ' + repr(error), 'yellow'))
             exit()
         
 
@@ -46,7 +47,7 @@ class MySQLController:
     # PRIVATE: Open a AMQP connection and store it into the class
     def __OpenConnection(self):
         try:
-            print(" [-] MySQLController: Opening a connection")
+            print("[-] MySQLController: Opening a connection")
             db = mysql.connect(
                 host    = self.server['host'],
                 user    = self.server['user'],
@@ -68,8 +69,8 @@ class MySQLController:
             # No raises, return true
             return True
         except Exception as error:
-            print(" [E] MySQLController: Impossible to connect to the server")
-            print('Caught this error: ' + repr(error))
+            print(colored("[E] MySQLController: Impossible to connect to the server", 'red'))
+            print(colored('[I] MySQLController: ' + repr(error), 'yellow'))
             return False
 
 
@@ -77,7 +78,7 @@ class MySQLController:
     # PRIVATE: Create a table for messages into database
     def __CheckTable(self):
         try:
-            print(" [-] MySQLController: Checking table existance")
+            print("[-] MySQLController: Checking table existance")
             query = ("SHOW TABLES LIKE '" + self.table + "'")
             self.cursor.execute(query)
 
@@ -87,8 +88,8 @@ class MySQLController:
 
             return True
         except Exception as error:
-            print(" [E] MySQLController: Table existance can not be checked")
-            print('Caught this error: ' + repr(error))
+            print(colored("[E] MySQLController: Table existance can not be checked", 'red'))
+            print(colored('[I] MySQLController: ' + repr(error), 'yellow'))
             return False
 
 
@@ -96,7 +97,7 @@ class MySQLController:
     # PRIVATE: Create a table for messages into database
     def __CreateTable(self):
         try:
-            print(" [-] MySQLController: Creating the table")
+            print("[-] MySQLController: Creating the table")
 
             # Dropping the table if already exists.
             self.cursor.execute('DROP TABLE IF EXISTS ' + self.table)
@@ -117,8 +118,8 @@ class MySQLController:
             # No raises, return true
             return True
         except Exception as error:
-            print(" [E] MySQLController: table for messages was not created")
-            print('Caught this error: ' + repr(error))
+            print(colored("[E] MySQLController: table for messages was not created", 'red'))
+            print(colored('[I] MySQLController: ' + repr(error), 'yellow'))
             return False
 
 
@@ -127,7 +128,7 @@ class MySQLController:
     # Message must be a python dictionary
     def StoreMessage(self, message):
         try:
-            print(" [-] MySQLController: Storing a message")
+            print("[-] MySQLController: Storing a message")
             # Get a timestamp for inserted row
             timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
@@ -143,7 +144,6 @@ class MySQLController:
             query = 'INSERT INTO `'+ self.table +'` (`data`, `created_at`, `updated_at`) VALUES (%s, %s, %s)'
             query_values = (message, timestamp, timestamp)
 
-            print(query)
             self.cursor.execute(query, query_values)
 
             # Store the data into DB
@@ -155,8 +155,8 @@ class MySQLController:
             # No raises, return true
             return True
         except Exception as error:
-            print(" [E] MySQLController: Message was not stored on database")
-            print('Caught this error: ' + repr(error))
+            print(colored("[E] MySQLController: Message was not stored on database", 'red') )
+            print(colored('[I] MySQLController: ' + repr(error), 'yellow'))
             return False
 
 

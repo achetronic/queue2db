@@ -23,6 +23,7 @@ RUN python${python_version} -m pip install pika > /dev/null
 RUN python${python_version} -m pip install mysql-connector-python > /dev/null
 RUN python${python_version} -m pip install python-decouple > /dev/null
 RUN python${python_version} -m pip install typing > /dev/null
+RUN python${python_version} -m pip install termcolor > /dev/null
 
 ####
 # Creating a temporary folder for our app
