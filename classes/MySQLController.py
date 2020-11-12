@@ -27,12 +27,10 @@ class MySQLController:
             self.cursor = None
 
             # Try to open a connection
-            print(" [-] Opening a connection")
             if (self.__OpenConnection() != True ):
                 raise
 
             # Check tables (and create if needed)
-            print(" [-] Checking and creating tables")
             if (self.__CheckTable() == False ):
                 if (self.__CreateTable() == False ):
                     raise
@@ -48,6 +46,7 @@ class MySQLController:
     # PRIVATE: Open a AMQP connection and store it into the class
     def __OpenConnection(self):
         try:
+            print(" [-] MySQLController: Opening a connection")
             db = mysql.connect(
                 host    = self.server['host'],
                 user    = self.server['user'],
@@ -128,6 +127,7 @@ class MySQLController:
     # Message must be a python dictionary
     def StoreMessage(self, message):
         try:
+            print(" [-] MySQLController: Storing a message")
             # Get a timestamp for inserted row
             # timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 

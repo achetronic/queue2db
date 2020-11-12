@@ -55,6 +55,7 @@ class AMQPController:
     # PRIVATE: Open a AMQP connection and store it into the class
     def __OpenConnection(self):
         try:
+            print(" [-] AMQPController: Opening a connection")
             # Set a connection
             credentials = pika.PlainCredentials(self.server['user'], self.server['pass'])
             parameters  = pika.ConnectionParameters(
@@ -100,6 +101,7 @@ class AMQPController:
     # This method pass three arguments (dict objects) to the callback: headers, properties, body
     def Consume(self, callback: Callable = None):
         try:
+            print(' [-] AMQPController: Starting a consumer')
             timestamp = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
 
             # User gave us a callback?
@@ -116,10 +118,10 @@ class AMQPController:
             self.channel.basic_consume(queue=self.queue, on_message_callback=defaultCallback, auto_ack=True, consumer_tag=self.consumerTag+'_'+timestamp)
 
             # Start consuming
-            print(' [*] Consumer started. Waiting for messages.')
+            print(' [-] AMQPController: Consumer started. Waiting for messages.')
             self.channel.start_consuming()
         except Exception as error:
-            print(' [*] Consumer stoped.')
+            print(' [E] AMQPController: Consumer stoped.')
             print('Caught this error: ' + repr(error))
             return None
 
