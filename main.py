@@ -8,7 +8,7 @@ from classes.MySQLController import MySQLController
 # Callback to be executed when a message arrives
 def on_message (headers, properties, body):
     try:
-        print(" [x] Message received")
+        print(" [*] Message received")
 
         message = {
             "body" : body,

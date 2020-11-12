@@ -11,7 +11,7 @@ class MySQLController:
     # Set credentials and open a connection against AMQP server
     def __init__(self):
         try:
-            print(" [-] Starting MySQLController")
+            print(" [-] MySQLController: Starting controller")
 
             # Access this with server["port"]
             server = {
@@ -142,6 +142,8 @@ class MySQLController:
             # Craft and execute the query
             query = 'INSERT INTO `'+ self.table +'` (`data`, `created_at`, `updated_at`) VALUES (%s, now(), now())'
             query_values = (message)
+
+            print(query)
             self.cursor.execute(query, query_values)
 
             # Store the data into DB

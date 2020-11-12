@@ -11,7 +11,7 @@ class AMQPController:
     # Set credentials and open a connection against AMQP server
     def __init__(self):
         try:
-            print(" [-] Starting AMQPController")
+            print(" [-] AMQPController: Starting controller")
 
             server = {
                 "host": config('AMQP_SERVER_HOST', default='localhost'),
