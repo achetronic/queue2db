@@ -15,7 +15,7 @@ def on_message (headers, properties, body):
             "headers" : headers,
             "properties" : properties
         }
-        
+
         if (mysql.StoreMessage(message) != True ):
             raise
     except Exception as error:
@@ -30,8 +30,11 @@ def main():
     # Init Controllers
     print(" [*] Starting controllers")
 
-    global amqp = AMQPController()
-    global mysql = MySQLController()
+    global amqp
+    global mysql
+
+    amqp = AMQPController()
+    mysql = MySQLController()
     
     # Process the queue
     amqp.Consume(on_message)
