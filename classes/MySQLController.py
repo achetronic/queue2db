@@ -107,11 +107,10 @@ class MySQLController:
             # Craft and execute the query
             query = (
                 'CREATE TABLE ' + self.table + ' ('
-                'id bigint unsigned NOT NULL AUTO_INCREMENT, '
+                'id bigint unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY, '
                 'data json NOT NULL, '
                 'created_at timestamp NULL DEFAULT NULL, '
-                'updated_at timestamp NULL DEFAULT NULL), '
-                'PRIMARY KEY (id)'
+                'updated_at timestamp NULL DEFAULT NULL)'
             )
             self.cursor.execute(query)
 
