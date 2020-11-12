@@ -18,8 +18,9 @@ def on_message (headers, properties, body):
 
         if (mysql.StoreMessage(message) != True ):
             raise
-    except:
+    except Exception as error:
         print(" [E] Message not stored on DB")
+        print('Caught this error: ' + repr(error))
     
 
 
