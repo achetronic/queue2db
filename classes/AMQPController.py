@@ -1,7 +1,6 @@
+import pika
 import logging
 from decouple import config
-import pika
-from typing import Callable
 from datetime import datetime
 
 
@@ -104,7 +103,8 @@ class AMQPController:
 
     # PUBLIC: Start a consumer and execute a callback for each message
     # This method pass three arguments (dict objects) to the callback: headers, properties, body
-    def Consume(self, callback: Callable = None):
+    # def Consume(self, callback: Callable = None):    ¿¿from typing import Callable??
+    def Consume(self, callback = None):
         try:
             logging.info("[-] AMQPController: Starting a consumer")
 

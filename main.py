@@ -2,7 +2,6 @@
 import sys, os
 import logging
 from decouple import config
-from termcolor import colored
 from classes.AMQPController import AMQPController
 from classes.MySQLController import MySQLController
 

@@ -1,9 +1,8 @@
-import mysql.connector as mysql
-from datetime import datetime
-from decouple import config
-from termcolor import colored
 import json
 import logging
+import mysql.connector as mysql
+from decouple import config
+from datetime import datetime
 
 
 
