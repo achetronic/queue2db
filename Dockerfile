@@ -45,8 +45,8 @@ RUN rm -rf /entrypoint.sh && touch /entrypoint.sh
 RUN echo "#!/bin/bash" >> /entrypoint.sh
 RUN echo "service atd start" >> /entrypoint.sh
 RUN echo "nohup python3 -u /app/main.py &>/dev/null &" >> /entrypoint.sh
-#RUN echo "pkill -f /app/main.py | at now + 4 hours" >> /entrypoint.sh
-RUN echo "kill -9 $(pgrep -f 'python3 -u /app/main.py') | at now + 4 hours" >> /entrypoint.sh
+RUN echo "pkill -f /app/main.py | at now + 4 hours" >> /entrypoint.sh
+RUN echo "kill -9 $(pgrep -f /app/main.py) | at now + 4 hours" >> /entrypoint.sh
 RUN echo "/bin/bash" >> /entrypoint.sh
 
 # Giving permissions to the executable scripts
