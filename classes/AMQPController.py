@@ -69,7 +69,7 @@ class AMQPController:
                     credentials, 
                     heartbeat=0, 
                     socket_timeout=None, 
-                    blocked_connection_timeout=None
+                    blocked_connection_timeout=None,
                     stack_timeout=None
                 )
                 connection = pika.BlockingConnection(parameters)
