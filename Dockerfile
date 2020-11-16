@@ -49,8 +49,11 @@ RUN echo "nohup python3 -u /app/main.py &>/dev/null &" >> /entrypoint.sh
 RUN echo "kill -9 $(pgrep -f 'python3 -u /app/main.py') | at now + 4 hours" >> /entrypoint.sh
 RUN echo "/bin/bash" >> /entrypoint.sh
 
+# Giving permissions to the executable scripts
 RUN chown root:root /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+RUN chown root:root /app/livenessprobe.sh
+RUN chmod +x /app/livenessprobe.sh
 
 # Gaining a bit of comfort
 WORKDIR "/app"
