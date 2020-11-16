@@ -1,7 +1,7 @@
+import logging
+from decouple import config
 import pika
 from typing import Callable
-from decouple import config
-from termcolor import colored
 from datetime import datetime
 
 
@@ -12,7 +12,7 @@ class AMQPController:
     # Set credentials and open a connection against AMQP server
     def __init__(self):
         try:
-            print("[-] AMQPController: Starting controller")
+            logging.info("[-] AMQPController: Starting controller")
 
             server = {
                 "host": config('AMQP_SERVER_HOST', default='localhost'),
@@ -48,54 +48,57 @@ class AMQPController:
                 raise
             return None
         except Exception as error:
-            print(colored("[E] AMQPController: Impossible to init the class", 'red'))
-            print(colored('[I] AMQPController: ' + repr(error), 'yellow'))
+            logging.error("[E] AMQPController: Impossible to init the class")
+            logging.debug('[I] AMQPController: ' + repr(error))
             exit()
         
 
 
     # PRIVATE: Open a AMQP connection and store it into the class
     def __OpenConnection(self):
-        try:
-            print("[-] AMQPController: Opening a connection")
-            # Set a connection
-            credentials = pika.PlainCredentials(self.server['user'], self.server['pass'])
-            parameters  = pika.ConnectionParameters(
-                self.server['host'], 
-                self.server['port'], 
-                self.server['vhost'], 
-                credentials, 
-                heartbeat=0, 
-                socket_timeout=None, 
-                blocked_connection_timeout=None
-            )
-            connection = pika.BlockingConnection(parameters)
+        while (True):
+            try:
+                logging.info("[-] AMQPController: Opening a connection")
 
-            # Store connection on the class
-            self.connection = connection
-            if ( self.connection == None ):
-                raise
+                # Set a connection
+                credentials = pika.PlainCredentials(self.server['user'], self.server['pass'])
+                parameters  = pika.ConnectionParameters(
+                    self.server['host'], 
+                    self.server['port'], 
+                    self.server['vhost'], 
+                    credentials, 
+                    heartbeat=0, 
+                    socket_timeout=None, 
+                    blocked_connection_timeout=None
+                    stack_timeout=None
+                )
+                connection = pika.BlockingConnection(parameters)
 
-            # Create the channel
-            self.channel = connection.channel()
-            if ( self.channel == None ):
-                raise
+                # Store connection on the class
+                self.connection = connection
+                if ( self.connection == None ):
+                    raise
 
-            # Try to craft the exchange
-            self.channel.exchange_declare(exchange=self.exchange, exchange_type='topic', passive=False, durable=True)
+                # Create the channel
+                self.channel = connection.channel()
+                if ( self.channel == None ):
+                    raise
 
-            # Try to craft the queue on the channel
-            self.channel.queue_declare(queue=self.queue, durable=True, exclusive=False, auto_delete=False)
+                # Try to craft the exchange
+                self.channel.exchange_declare(exchange=self.exchange, exchange_type='topic', passive=False, durable=True)
 
-            # Try to bind the exchange and the queue
-            self.channel.queue_bind(self.queue, self.exchange, self.routingKey)
+                # Try to craft the queue on the channel
+                self.channel.queue_declare(queue=self.queue, durable=True, exclusive=False, auto_delete=False)
 
-            # No raises, return true
-            return True
-        except Exception as error:
-            print(colored("[E] AMQPController: Impossible to connect to the server", 'red'))
-            print(colored('[I] AMQPController: ' + repr(error), 'yellow'))
-            return False
+                # Try to bind the exchange and the queue
+                self.channel.queue_bind(self.queue, self.exchange, self.routingKey)
+
+                # No raises, return true
+                return True
+            except Exception as error:
+                logging.error("[E] AMQPController: Impossible to connect to the server")
+                logging.debug('[I] AMQPController: ' + repr(error))
+                return False
 
 
 
@@ -103,7 +106,8 @@ class AMQPController:
     # This method pass three arguments (dict objects) to the callback: headers, properties, body
     def Consume(self, callback: Callable = None):
         try:
-            print('[-] AMQPController: Starting a consumer')
+            logging.info("[-] AMQPController: Starting a consumer")
+
             timestamp = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
 
             # User gave us a callback?
@@ -120,11 +124,12 @@ class AMQPController:
             self.channel.basic_consume(queue=self.queue, on_message_callback=defaultCallback, auto_ack=True, consumer_tag=self.consumerTag+'_'+timestamp)
 
             # Start consuming
-            print(colored('[-] AMQPController: Consumer started. Waiting for messages.', 'green'))
+            logging.info("[-] AMQPController: Consumer started. Waiting for messages")
+            # print(colored('[-] AMQPController: Consumer started. Waiting for messages.', 'green'))
             self.channel.start_consuming()
         except Exception as error:
-            print(colored('[E] AMQPController: Consumer stoped.', 'red'))
-            print(colored('[I] AMQPController: ' + repr(error), 'yellow'))
+            logging.error("[E] AMQPController: Consumer stoped")
+            logging.debug('[I] AMQPController: ' + repr(error))
             return None
 
 

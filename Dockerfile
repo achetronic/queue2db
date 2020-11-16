@@ -49,7 +49,7 @@ RUN find /app -type d -exec chmod 755 {} \;
 RUN rm -rf /entrypoint.sh && touch /entrypoint.sh
 RUN echo "#!/bin/bash" >> /entrypoint.sh
 RUN echo "shopt -s dotglob" >> /entrypoint.sh
-RUN echo "python3 /app/main.py" >> /entrypoint.sh
+RUN echo "nohup python3 -u /app/main.py &>/dev/null &" >> /entrypoint.sh
 
 RUN chown root:root /entrypoint.sh
 RUN chmod +x /entrypoint.sh
