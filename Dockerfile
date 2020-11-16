@@ -1,9 +1,5 @@
-FROM debian:buster-slim
-
-
-
-#### DEFINING VARS
-ARG python_version=3
+# Use always Ubuntu LTS versions
+FROM ubuntu:20.04
 
 
 
@@ -15,14 +11,14 @@ RUN apt-get install -y -qq --force-yes \
     at \
     lsb-base \
 	procps \
-    python${python_version} \
-	python${python_version}-pip \
+    python3 \
+	python3-pip \
         --no-install-recommends > /dev/null
 
 # Installing pip modules
-RUN python${python_version} -m pip install pika > /dev/null
-RUN python${python_version} -m pip install mysql-connector-python > /dev/null
-RUN python${python_version} -m pip install python-decouple > /dev/null
+RUN python3 -m pip install pika > /dev/null
+RUN python3 -m pip install mysql-connector-python > /dev/null
+RUN python3 -m pip install python-decouple > /dev/null
 
 ####
 # Creating a temporary folder for our app
