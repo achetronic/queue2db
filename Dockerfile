@@ -12,6 +12,7 @@ RUN apt-get update
 
 # Installing system packages
 RUN apt-get install -y -qq --force-yes \
+    at \
     lsb-base \
 	procps \
     python${python_version} \
@@ -23,7 +24,6 @@ RUN python${python_version} -m pip install pika > /dev/null
 RUN python${python_version} -m pip install mysql-connector-python > /dev/null
 RUN python${python_version} -m pip install python-decouple > /dev/null
 RUN python${python_version} -m pip install typing > /dev/null
-RUN python${python_version} -m pip install termcolor > /dev/null
 
 ####
 # Creating a temporary folder for our app
@@ -48,9 +48,10 @@ RUN find /app -type d -exec chmod 755 {} \;
 # Crafting the entrypoint script
 RUN rm -rf /entrypoint.sh && touch /entrypoint.sh
 RUN echo "#!/bin/bash" >> /entrypoint.sh
-RUN echo "shopt -s dotglob" >> /entrypoint.sh
+RUN echo "service atd start" >> /entrypoint.sh
 RUN echo "nohup python3 -u /app/main.py &>/dev/null &" >> /entrypoint.sh
-#RUN echo "python3 /app/main.py" >> /entrypoint.sh
+#RUN echo "pkill -f /app/main.py | at now + 4 hours" >> /entrypoint.sh
+RUN echo "kill -9 $(pgrep -f 'python3 -u /app/main.py') | at now + 4 hours" >> /entrypoint.sh
 RUN echo "/bin/bash" >> /entrypoint.sh
 
 RUN chown root:root /entrypoint.sh
