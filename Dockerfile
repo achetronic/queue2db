@@ -45,7 +45,7 @@ RUN rm -rf /entrypoint.sh && touch /entrypoint.sh
 RUN echo "#!/bin/bash" >> /entrypoint.sh
 RUN echo "service atd start" >> /entrypoint.sh
 RUN echo "nohup python3 -u /app/main.py &>/dev/null &" >> /entrypoint.sh
-RUN echo 'echo "pkill -f python3" | at now + 2 minutes' >> /entrypoint.sh
+RUN echo 'echo "pkill -f python3" | at now + 5 hours' >> /entrypoint.sh
 #RUN echo 'echo "kill -9 $(pgrep -f python3)" | at now + 2 minutes' >> /entrypoint.sh
 #RUN echo 'echo "shutdown -h now" | at now + 2 minutes' >> /entrypoint.sh
 RUN echo "/bin/bash" >> /entrypoint.sh
