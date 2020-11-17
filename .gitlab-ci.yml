@@ -13,15 +13,17 @@ before_script:
   # - export CI_REGISTRY_USER=${CI_REGISTRY_USER:-gitlab-ci-token}
   # - export CI_REGISTRY_PASSWORD=${CI_REGISTRY_PASSWORD:-${CI_JOB_TOKEN}}
   # - export DOCKER_IMAGE=${DOCKER_IMAGE:-${CI_REGISTRY}/${CI_PROJECT_PATH}}
-  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  - docker login $CI_REGISTRY -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" 
 
 build:
   stage: build
   script:
-    - docker build --pull -t "$CI_REGISTRY_IMAGE" .
-    - docker push "$CI_REGISTRY_IMAGE"
-  only:
-    - master
+    # - docker build --pull -t "$CI_REGISTRY_IMAGE" .
+    # - docker push "$CI_REGISTRY_IMAGE"
+    - docker build -t $CI_REGISTRY/achetronic/queue2db-python/image:latest .
+    - docker push $CI_REGISTRY/achetronic/queue2db-python/image:latest
+  # only:
+  #   - master
 
 # test:
 #   stage: test
