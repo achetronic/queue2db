@@ -9,6 +9,7 @@ RUN apt-get update
 # Installing system packages
 RUN apt-get install -y -qq --force-yes \
     at \
+    cron \
     lsb-base \
 	procps \
     python3 \
@@ -44,10 +45,13 @@ RUN find /app -type d -exec chmod 755 {} \;
 RUN rm -rf /entrypoint.sh && touch /entrypoint.sh
 RUN echo "#!/bin/bash" >> /entrypoint.sh
 RUN echo "service atd start" >> /entrypoint.sh
-RUN echo "nohup python3 -u /app/main.py &>/dev/null &" >> /entrypoint.sh
-RUN echo 'echo "pkill -f python3" | at now + 5 hours' >> /entrypoint.sh
-#RUN echo 'echo "kill -9 $(pgrep -f python3)" | at now + 2 minutes' >> /entrypoint.sh
-#RUN echo 'echo "shutdown -h now" | at now + 2 minutes' >> /entrypoint.sh
+RUN echo "sh /app/takeover.sh" >> /entrypoint.sh
+#RUN echo "service cron start" >> /entrypoint.sh
+#RUN echo "(crontab -l; echo '0 * * * * cd /app && ./restart.sh >> /dev/null 2>&1';) | crontab -" >> /entrypoint.sh
+#RUN echo "touch /etc/crontab /etc/cron.*/*" >> /entrypoint.sh
+#RUN echo 'exec "$@"' >> /entrypoint.sh
+#RUN echo "nohup python3 -u /app/main.py &>/dev/null &" >> /entrypoint.sh
+#RUN echo 'echo "pkill -f python3" | at now + 5 hours' >> /entrypoint.sh
 RUN echo "/bin/bash" >> /entrypoint.sh
 
 # Giving permissions to the entrypoint script
@@ -57,6 +61,10 @@ RUN chmod +x /entrypoint.sh
 # Giving permissions to the livenessprobe script
 RUN chown root:root /app/livenessprobe.sh
 RUN chmod +x /app/livenessprobe.sh
+
+# Giving permissions to the takeover script
+RUN chown root:root /app/takeover.sh
+RUN chmod +x /app/takeover.sh
 
 # Gaining a bit of comfort
 WORKDIR "/app"
