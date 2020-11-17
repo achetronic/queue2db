@@ -13,11 +13,11 @@ build:
   stage: buildAndPush
   script:
     # Build and push the real image
-    - docker build -t $CI_REGISTRY/achetronic/queue2db-python:$TAG .
-    - docker push $CI_REGISTRY/achetronic/queue2db-python:$TAG
+    - docker build -t $CI_REGISTRY/${CI_PROJECT_PATH}:$TAG .
+    - docker push $CI_REGISTRY/${CI_PROJECT_PATH}:$TAG
 
     # Retag and push the image to have a latest tag
-    - docker tag $CI_REGISTRY/achetronic/queue2db-python:$TAG $CI_REGISTRY/achetronic/queue2db-python:latest
-    - docker push $CI_REGISTRY/achetronic/queue2db-python:latest
+    - docker tag $CI_REGISTRY/${CI_PROJECT_PATH}:$TAG $CI_REGISTRY/${CI_PROJECT_PATH}:latest
+    - docker push $CI_REGISTRY/${CI_PROJECT_PATH}:latest
   only:
     - master
