@@ -45,13 +45,16 @@ RUN rm -rf /entrypoint.sh && touch /entrypoint.sh
 RUN echo "#!/bin/bash" >> /entrypoint.sh
 RUN echo "service atd start" >> /entrypoint.sh
 RUN echo "nohup python3 -u /app/main.py &>/dev/null &" >> /entrypoint.sh
-RUN echo "pkill -f /app/main.py | at now + 4 hours" >> /entrypoint.sh
-RUN echo "kill -9 $(pgrep -f /app/main.py) | at now + 4 hours" >> /entrypoint.sh
+RUN echo 'echo "pkill -f python3" | at now + 2 minutes' >> /entrypoint.sh
+#RUN echo 'echo "kill -9 $(pgrep -f python3)" | at now + 2 minutes' >> /entrypoint.sh
+#RUN echo 'echo "shutdown -h now" | at now + 2 minutes' >> /entrypoint.sh
 RUN echo "/bin/bash" >> /entrypoint.sh
 
-# Giving permissions to the executable scripts
+# Giving permissions to the entrypoint script
 RUN chown root:root /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+
+# Giving permissions to the livenessprobe script
 RUN chown root:root /app/livenessprobe.sh
 RUN chmod +x /app/livenessprobe.sh
 
