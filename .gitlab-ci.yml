@@ -1,0 +1,38 @@
+image: docker:latest
+# services:
+# - docker:dind
+
+stages:
+- build
+# - test
+# - release
+
+before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+
+build:
+  stage: build
+  script:
+    - docker build --pull -t "$CI_REGISTRY_IMAGE" .
+    - docker push "$CI_REGISTRY_IMAGE"
+  only:
+    - master
+
+# test:
+#   stage: test
+#   script:
+#     - docker pull $CI_REGISTRY_IMAGE
+#     - docker run $CI_REGISTRY_IMAGE npm test
+
+# release:
+#   stage: release
+#   script:
+#     - docker pull $CI_REGISTRY_IMAGE
+#     - docker tag $CI_REGISTRY_IMAGE $RELEASE_IMAGE
+#     - docker push $RELEASE_IMAGE
+#   only:
+#     - master
+
+
+
+
