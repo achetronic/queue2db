@@ -1,6 +1,6 @@
-image: docker:stable
-# services:
-# - docker:dind
+image: docker:latest
+services:
+- docker:dind
 
 stages:
 - build
