@@ -3,25 +3,23 @@ services:
 - docker:dind
 
 stages:
-- build
+- buildAndPush
 # - test
 # - release
 
 before_script:
-  # - export VERSION=$(cat VERSION)
-  # - export CI_REGISTRY=${CI_REGISTRY:-hub.docker.com}
-  # - export CI_REGISTRY_USER=${CI_REGISTRY_USER:-gitlab-ci-token}
-  # - export CI_REGISTRY_PASSWORD=${CI_REGISTRY_PASSWORD:-${CI_JOB_TOKEN}}
-  # - export DOCKER_IMAGE=${DOCKER_IMAGE:-${CI_REGISTRY}/${CI_PROJECT_PATH}}
+  - export TAG=${CI_COMMIT_SHA}-${CI_JOB_ID}
   - docker login $CI_REGISTRY -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" 
 
 build:
-  stage: build
+  stage: buildAndPush
   script:
-    # - docker build --pull -t "$CI_REGISTRY_IMAGE" .
-    # - docker push "$CI_REGISTRY_IMAGE"
-    - docker build -t $CI_REGISTRY/achetronic/queue2db-python:$CI_JOB_ID .
-    - docker push $CI_REGISTRY/achetronic/queue2db-python:$CI_JOB_ID
+    # Build and push the real image
+    - docker build -t $CI_REGISTRY/achetronic/queue2db-python:$TAG .
+    - docker push $CI_REGISTRY/achetronic/queue2db-python:$TAG
+
+    # Retag and push the image to have a latest tag
+    - docker tag $CI_REGISTRY/achetronic/queue2db-python:$TAG $CI_REGISTRY/achetronic/queue2db-python:latest
     - docker push $CI_REGISTRY/achetronic/queue2db-python:latest
   only:
     - master
