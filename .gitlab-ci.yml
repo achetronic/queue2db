@@ -20,10 +20,11 @@ build:
   script:
     # - docker build --pull -t "$CI_REGISTRY_IMAGE" .
     # - docker push "$CI_REGISTRY_IMAGE"
-    - docker build -t $CI_REGISTRY/achetronic/queue2db-python/image:latest .
-    - docker push $CI_REGISTRY/achetronic/queue2db-python/image:latest
-  # only:
-  #   - master
+    - docker build -t $CI_REGISTRY/achetronic/queue2db-python:$CI_JOB_ID .
+    - docker push $CI_REGISTRY/achetronic/queue2db-python:$CI_JOB_ID
+    - docker push $CI_REGISTRY/achetronic/queue2db-python:latest
+  only:
+    - master
 
 # test:
 #   stage: test
