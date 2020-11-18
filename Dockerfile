@@ -44,7 +44,7 @@ RUN find /app -type d -exec chmod 755 {} \;
 RUN rm -rf /entrypoint.sh && touch /entrypoint.sh
 RUN echo "#!/bin/bash" >> /entrypoint.sh
 RUN echo "service atd start" >> /entrypoint.sh
-RUN echo "sh /app/takeover.sh" >> /entrypoint.sh
+RUN echo "sh /app/runtime/takeover.sh" >> /entrypoint.sh
 RUN echo "/bin/bash" >> /entrypoint.sh
 
 # Giving permissions to the entrypoint script
@@ -52,12 +52,12 @@ RUN chown root:root /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # Giving permissions to the livenessprobe script
-RUN chown root:root /app/livenessprobe.sh
-RUN chmod +x /app/livenessprobe.sh
+RUN chown root:root /app/runtime/livenessprobe.sh
+RUN chmod +x /app/runtime/livenessprobe.sh
 
 # Giving permissions to the takeover script
-RUN chown root:root /app/takeover.sh
-RUN chmod +x /app/takeover.sh
+RUN chown root:root /app/runtime/takeover.sh
+RUN chmod +x /app/runtime/takeover.sh
 
 # Gaining a bit of comfort
 WORKDIR "/app"
