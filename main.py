@@ -2,6 +2,7 @@
 import sys, os
 import logging
 from decouple import config
+from datetime import datetime
 from classes.AMQPController import AMQPController
 from classes.MySQLController import MySQLController
 
@@ -29,8 +30,8 @@ def on_message (headers, properties, body):
 
 # Main process
 def main():
-
-    logging.basicConfig(filename='output.log', level=logging.INFO)
+    #timestamp = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
+    logging.basicConfig(filename='logs/output.log', level=logging.INFO)
 
     # Init Controllers
     logging.info("[I] Main: Starting controllers")
