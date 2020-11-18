@@ -24,8 +24,7 @@ def on_message (headers, properties, body):
     except Exception as error:
         logging.error("[E] Message not stored on DB")
         logging.debug('Caught this error: ' + repr(error))
-        #print("[E] Message not stored on DB")
-        
+
 
 
 # Main process
